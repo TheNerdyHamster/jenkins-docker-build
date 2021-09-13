@@ -1,35 +1,43 @@
 pipeline {
-    agent any
-    stages {
-
-        stage("Testing")
-        {
-            steps
-            {
-                script {
-                            echo "INFO: Test Stage"
-                    }
-            }
+  environment {
+      imageName = "thenerdyhamster/demo-pipeline"
+      registryCredentials = "docker-hub-credentials"
+      gitCredentials = "github-ssh-credentials"
+      dockerImage = ''
+  }
+  agent any
+  stages {
+    stage("Clone git repo") {
+      steps {
+        script {
+          git([url: 'git@github.com:TheNerdyHamster/jenkins-docker-build.git', branch: 'main', credentialsId: gitCredentials])
         }
-
-        stage("Build")
-        {
-            steps
-            {
-                script {
-                        echo "INFO: Build Stage"
-                    }
-            }
-        }
-
-        stage("Deploy")
-        {
-            steps
-            {
-                script {
-                            echo "INFO: Deploy Stage"
-                    }
-            }
-        }
+      }
     }
+    stage("Build image") {
+      steps {
+        script {
+          dockerImage = docker.build imageName
+        }
+      }
+    }
+    stage("Deploy image") {
+      steps {
+        script {
+          docker.withRegistry('', registryCredentials) {
+              dockerImage.push('$BUILD_NUMBER')
+              dockerImage.push('latest')
+          }
+        }
+      }
+    }
+    stage("Clean up build") {
+      steps {
+        script {
+          sh "docker rmi $imageName:$BUILD_NUMBER"
+          sh "docker rmi $imageName:latest"
+        }
+      }
+    }
+  }
 }
