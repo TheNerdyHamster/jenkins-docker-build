@@ -2,7 +2,7 @@ pipeline {
   environment {
       imageName = "thenerdyhamster/demo-pipeline"
       registryCredentials = "docker-hub-credentials"
-      gitCredentials = "github-ssh-credentials"
+      gitCredentials = "git"
       dockerImage = ''
   }
   agent any
