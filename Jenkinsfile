@@ -9,7 +9,8 @@ pipeline {
     stage("Clone git repo") {
       steps {
         script {
-          git([url: 'git@github.com:TheNerdyHamster/jenkins-docker-build.git', branch: 'main', credentialsId: 'git'])
+          // git([url: 'git@github.com:TheNerdyHamster/jenkins-docker-build.git', branch: 'main', credentialsId: 'git'])
+          sh 'ls'
         }
       }
     }
