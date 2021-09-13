@@ -2,6 +2,16 @@ pipeline {
     agent any
     stages {
 
+        stage("Testing")
+        {
+            steps
+            {
+                script {
+                            echo "INFO: Test Stage"
+                    }
+            }
+        }
+
         stage("Build")
         {
             steps
