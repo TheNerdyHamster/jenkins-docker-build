@@ -2,7 +2,6 @@ pipeline {
   environment {
       imageName = "thenerdyhamster/demo-pipeline"
       registryCredentials = "docker-hub-credentials"
-      gitCredentials = "git"
       dockerImage = ''
   }
   agent any
@@ -10,7 +9,7 @@ pipeline {
     stage("Clone git repo") {
       steps {
         script {
-          git([url: 'git@github.com:TheNerdyHamster/jenkins-docker-build.git', branch: 'main', credentialsId: gitCredentials])
+          git([url: 'git@github.com:TheNerdyHamster/jenkins-docker-build.git', branch: 'main', credentialsId: 'git'])
         }
       }
     }
